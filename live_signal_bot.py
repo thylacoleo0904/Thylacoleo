@@ -29,7 +29,7 @@ TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "VUL_HIER_IN")
 
 BOT_NAME = "Yaantje"
 SYMBOLS = ["BTC/USDT", "ETH/USDT", "SOL/USDT"]   # pas aan naar de coins die je wil monitoren
-TIMEFRAME = "1h"
+TIMEFRAME = "10m"
 CAPITAL_PER_COIN = {  # verdeel je kapitaal zelf over de coins, of geef iedereen hetzelfde
     "BTC/USDT": 500.0,
     "ETH/USDT": 300.0,
