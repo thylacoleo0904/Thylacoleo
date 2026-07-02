@@ -51,7 +51,7 @@ def send_telegram(message: str):
 def check_symbol(symbol: str):
     import pandas as pd
     exchange = exchange = ccxt.kraken()  # Kraken i.p.v. Binance: Binance blokkeert cloud-server IP's
-    candles = exchange.fetch_ohlcv(symbol, TIMEFRAME, limit=250)  # genoeg voor EMA200
+    candles = exchange.fetch_ohlcv(symbol, TIMEFRAME,)  # genoeg voor EMA200
     df = pd.DataFrame(candles, columns=["timestamp", "open", "high", "low", "close", "volume"])
     df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
     df = df.set_index("timestamp")
