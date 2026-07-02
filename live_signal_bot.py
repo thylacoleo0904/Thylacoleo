@@ -54,7 +54,7 @@ def check_symbol(symbol: str):
     candles = exchange.fetch_ohlcv(symbol, TIMEFRAME,)  # genoeg voor EMA200
     df = pd.DataFrame(candles, columns=["timestamp", "open", "high", "low", "close", "volume"])
     df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
-    df = df.set_index("timestamp")
+    df = add_indicators(df)
 
     df = add_indicators(df)
     df = generate_signals(df)
