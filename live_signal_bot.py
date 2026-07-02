@@ -36,7 +36,7 @@ CAPITAL_PER_COIN = {  # verdeel je kapitaal zelf over de coins, of geef iedereen
     "SOL/USDT": 200.0,
 }
 RISK_PCT = 0.01         # riskeer max 1% van het toegewezen kapitaal per trade
-CHECK_INTERVAL_SEC = 3600  # elk uur checken (past bij 1h timeframe)
+CHECK_INTERVAL_SEC = 600  # elk uur checken (past bij 1h timeframe)
 
 
 def send_telegram(message: str):
