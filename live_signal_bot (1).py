@@ -35,15 +35,15 @@ BOT_NAME = "Thylacoleo"
 QUOTE_CURRENCIES = ("USDT", "USD")   # scan alle coins met deze quote-valuta
 SYMBOL_REFRESH_INTERVAL = 24         # ververs de coinlijst elke X checks (nieuwe coins kunnen bijkomen)
 TIMEFRAME = "15m"
-TOTAL_CAPITAL = 1000.0   # jouw totale kapitaal, verdeeld over alle mogelijke signalen
+TOTAL_CAPITAL = 100.0   # jouw totale kapitaal, verdeeld over alle mogelijke signalen
 RISK_PCT = 0.01          # riskeer max 1% van TOTAL_CAPITAL per trade, ongeacht welke coin
-CHECK_INTERVAL_SEC = 900  # elke 15 min checken (past bij 15m timeframe)
-DELAY_BETWEEN_SYMBOLS_SEC = 1.0  # kleine pauze tussen coins, om Kraken niet te overspoelen
+CHECK_INTERVAL_SEC = 300  # 5 min wachten tussen scan-rondes (sneller dan voorheen)
+DELAY_BETWEEN_SYMBOLS_SEC = 0.5  # kortere pauze tussen coins; Kraken's eigen rate-limiter (enableRateLimit) beschermt ons alsnog
  
 # Filter op historische betrouwbaarheid: GEEN garantie voor de toekomst, alleen een
 # indicatie of de strategie op DEZE coin recent vaker gelijk had dan ongelijk.
-MIN_WIN_RATE = 0.55       # toon alleen coins met minstens 55% winnende trades in de recente historie
-MIN_TRADES_FOR_FILTER = 5  # te weinig historische trades = te onbetrouwbaar om iets over te zeggen, dan overslaan
+MIN_WIN_RATE = 0.65       # toon alleen coins met minstens 65% winnende trades in de recente historie
+MIN_TRADES_FOR_FILTER = 10  # minstens 10 historische trades nodig, anders te onbetrouwbaar (voorkomt toevalstreffers)
  
 # Circuit breaker: LET OP, dit is GEEN limiet op werkelijk verlies (de bot weet niet of jij
 # een signaal hebt opgevolgd of wat het resultaat was). Het is een limiet op hoeveel risico
@@ -214,20 +214,20 @@ def check_symbol(exchange, symbol: str):
         voorgesteld_storten = math.ceil((positie_kosten_eur * 1.05) / 10) * 10
  
         message = (
-            f"🦁 {BOT_NAME} — SIGNAAL: {symbol}\n\n"
-            f"Entry: {entry:.6f}\n"
-            f"Stop-loss: {stop:.6f}\n"
-            f"Target: {target:.6f}\n"
-            f"Voorgestelde positie: {units:.6f} {symbol.split('/')[0]}\n"
-            f"Kostprijs van deze positie: €{positie_kosten_eur:.2f}\n"
-            f"👉 Stort/zorg voor ongeveer €{voorgesteld_storten:.0f} op je exchange "
-            f"(inclusief kleine marge voor fees/koersschommeling)\n"
-            f"Risico bij deze trade: €{risk_eur:.2f} ({RISK_PCT*100:.0f}% van totaalkapitaal)\n\n"
-            f"📊 Historische win rate op deze coin (recente periode): {win_rate*100:.0f}% "
-            f"over {len(trades)} trades. Dit is GEEN garantie voor de toekomst, "
-            f"alleen hoe de strategie zich hier recent gedroeg.\n\n"
-            f"⚠️ Handel alleen als je zelf akkoord bent met het risico.\n\n"
-            f"Tip: log deze trade in portfolio.py als je 'm uitvoert, om je P&L bij te houden."
+            f"🦁 {BOT_NAME} — KANS GEVONDEN: {symbol}\n\n"
+            f"Doe dit (als je wil meedoen):\n\n"
+            f"1️⃣ Zorg dat je ongeveer €{voorgesteld_storten:.0f} op Kraken hebt staan\n\n"
+            f"2️⃣ Koop {units:.6f} {symbol.split('/')[0]} "
+            f"(rond de prijs van {entry:.6f})\n\n"
+            f"3️⃣ Zet meteen een stop-loss order op {stop:.6f} "
+            f"— dit verkoopt automatisch als het misgaat, zodat je max €{risk_eur:.2f} verliest\n\n"
+            f"4️⃣ Zet een verkooporder (take-profit) op {target:.6f} "
+            f"— dit pakt automatisch je winst als het goed gaat\n\n"
+            f"5️⃣ Klaar. Niet meer naar kijken, de orders doen de rest.\n\n"
+            f"📊 Deze aanpak had op deze coin recent {win_rate*100:.0f}% succes "
+            f"(over {len(trades)} keer). Geen garantie — het kan ook misgaan, "
+            f"daarom is de stop-loss zo belangrijk.\n\n"
+            f"Niet meedoen is ook prima. Alleen handelen met geld dat je kan missen."
         )
         send_telegram(message)
         _daily_risk_sent += risk_eur
