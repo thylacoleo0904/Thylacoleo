@@ -270,4 +270,4 @@ if __name__ == "__main__":
         check_and_alert(exchange, _current_symbols)
         check_count += 1
         time.sleep(CHECK_INTERVAL_SEC)
- 
+
