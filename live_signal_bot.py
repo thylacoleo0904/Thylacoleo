@@ -48,7 +48,7 @@ MIN_TRADES_FOR_FILTER = 10  # minstens 10 historische trades nodig, anders te on
 # Circuit breaker: LET OP, dit is GEEN limiet op werkelijk verlies (de bot weet niet of jij
 # een signaal hebt opgevolgd of wat het resultaat was). Het is een limiet op hoeveel risico
 # de bot op één dag TOTAAL voorstelt via signalen, zodat je niet overspoeld wordt op een drukke dag.
-MAX_DAILY_RISK_PCT = 0.05  # stop met nieuwe signalen zodra vandaag samen al 5% van kapitaal is voorgesteld
+MAX_DAILY_RISK_PCT = 0.20  # stop met nieuwe signalen zodra vandaag samen al 20% van kapitaal is voorgesteld (±20 signalen/dag)
  
 _daily_risk_sent = 0.0
 _daily_risk_date = None
